@@ -336,6 +336,28 @@ Running on z/OS (NEW)
   .. error::
     /usr/bin/python: FSUM7351 not found
 
+
+* Certain language environment (LE) configurations enable auto conversion and file tagging functionality required by python on z/OS systems. 
+
+  Include the following configurations when setting the remote environment for any z/OS managed nodes. (group_vars, host_vars, playbook, or task):
+
+  .. code-block:: yaml
+
+    _BPXK_AUTOCVT: "ON"
+    _CEE_RUNOPTS: "FILETAG(AUTOCVT,AUTOTAG) POSIX(ON)"
+
+    _TAG_REDIR_ERR: "txt"
+    _TAG_REDIR_IN: "txt"
+    _TAG_REDIR_OUT: "txt"
+
+
+  Note, the remote environment can be set any of these levels: inventory (inventory.yml, group_vars, or host_vars), play, block, or task with the `environment` key word.
+
+
+
+.. IBM z/OS operates in multiple encodings, primarily UTF-8 and EBCDIC for text files and streams and of course, binary. Ansible works with UTF-8 for text and binary. 
+
+
 Running on z/OS
 ---------------
 
