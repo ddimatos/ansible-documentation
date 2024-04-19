@@ -317,6 +317,25 @@ is likely the problem. There are several workarounds:
 
   (bash, ksh, and zsh should also be POSIX compatible if you have any of those installed).
 
+Running on z/OS (NEW)
+---------------------
+
+* Ansible requires a Python 3 interpreter to execute modules on the remote host, and checks for it at the ‘default’ path ``/usr/bin/python``.
+
+  On z/OS, the Python 3 interpreter (from `IBM Open Enterprise SDK for Python <https://www.ibm.com/products/open-enterprise-python-zos>`_) is often installed to a different path, typically something like: ``<path-to-python>/usr/lpp/cyp/v3r12/pyz``. 
+
+  The path to the python interpreter can be configured with the Ansible inventory variable ``ansible_python_interpreter``.
+  For example:
+
+  .. code-block:: ini
+
+    zos1 ansible_python_interpreter:/python/3.12/usr/lpp/cyp/v3r12/pyz
+
+  When the path to the python interpreter is not found in the default location on the target host, the following error may result:
+
+  .. error::
+    /usr/bin/python: FSUM7351 not found
+
 Running on z/OS
 ---------------
 
