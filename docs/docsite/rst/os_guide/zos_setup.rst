@@ -8,5 +8,5 @@ This document discusses required setup before Ansible can communicate with a z/O
    :local:
 
 Host Requirements
-`````````````````
+-----------------
 For Ansible to communicate....
