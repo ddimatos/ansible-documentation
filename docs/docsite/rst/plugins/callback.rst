@@ -23,7 +23,7 @@ The :ref:`say <say_callback>` callback responds with a computer-synthesized spee
 Enabling callback plugins
 -------------------------
 
-You can activate a custom callback by either dropping it into a ``callback_plugins`` directory adjacent to your play, inside a role, or by putting it in one of the callback directory sources configured in :ref:`ansible.cfg <ansible_configuration_settings>`.
+You can activate a custom callback, depending on it's ``NEEDS_ENABLED`` property,  by either dropping it into one of the callback directory sources configured in :ref:`ansible.cfg <ansible_configuration_settings>` or in a collection and referencing it in configuration by FQCN.
 
 Plugins are loaded in alphanumeric order. For example, a plugin implemented in a file named `1_first.py` would run before a plugin file named `2_second.py`.
 
@@ -110,7 +110,5 @@ Use ``ansible-doc -t callback <plugin name>`` to see plugin-specific documentati
        Strategy plugins
    :ref:`vars_plugins`
        Vars plugins
-   `User Mailing List <https://groups.google.com/forum/#!forum/ansible-devel>`_
-       Have a question?  Stop by the Google group!
-   :ref:`communication_irc`
-       How to join Ansible chat channels
+   :ref:`Communication<communication>`
+       Got questions? Need help? Want to share your ideas? Visit the Ansible communication guide

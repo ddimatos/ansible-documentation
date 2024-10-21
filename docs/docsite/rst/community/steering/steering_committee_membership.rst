@@ -1,7 +1,7 @@
 ..
    THIS DOCUMENT IS OWNED BY THE ANSIBLE COMMUNITY STEERING COMMITTEE. ALL CHANGES MUST BE APPROVED BY THE STEERING COMMITTEE!
    For small changes (fixing typos, language errors, etc.) create a PR and ping @ansible/steering-committee.
-   For other changes, create a discussion in https://github.com/ansible-community/community-topics/ to discuss the changes.
+   For other changes, create a :ref:`community topic<creating_community_topic>` to discuss the changes.
    (Creating a draft PR for this file and mentioning it in the community topic is also OK.)
 
 .. _community_steering_guidelines:
@@ -46,9 +46,13 @@ Team membership
 
 The Committee can accept a team to be a member.
 In this case, the team chooses its representative and announces the person in a dedicated `Community Topic <https://forum.ansible.com/tags/c/project/7/community-wg>`_.
-After the announcement is made, the new representative is added to the `SteeringCommittee <https://forum.ansible.com/g/SteeringCommittee>` group on the forum, and the previous representative is removed from that group.
+After the announcement is made, the new representative is added to the `SteeringCommittee <https://forum.ansible.com/g/SteeringCommittee>`_ group on the forum, and the previous representative is removed from that group.
 
 The team uses the same Community Topic for announcing subsequent representative changes. Representatives should commit to at least two months of membership.
+
+The team representative must still abide by all expectations listed in :ref:`steering_expectations`, including those surrounding participation.
+Steering Committee members are generally expected to participate in discussions — asynchronously on the forum and/or synchronously in meetings — and votes,
+even if the issue in question does not entirely pertain to the team they represent.
 
 Process
 ^^^^^^^^

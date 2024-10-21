@@ -301,7 +301,7 @@ Installing your collection locally
 You have two options for installing your collection locally:
 
   * Install your collection locally from the tarball.
-  * Install your collection locally from your git repository.
+  * Install your collection locally from your Git repository.
 
 Installing your collection locally from the tarball
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -316,10 +316,10 @@ Install the tarball into a directory configured in :ref:`COLLECTIONS_PATHS` so A
 
 .. _collections_scm_install:
 
-Installing your collection locally from a git repository
+Installing your collection locally from a Git repository
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To install your collection locally from a git repository, specify the repository and the branch you want to install:
+To install your collection locally from a Git repository, specify the repository and the branch you want to install:
 
 .. code-block:: bash
 
@@ -400,7 +400,5 @@ After Galaxy uploads and accepts a collection, the website shows you the **My Im
        Learn how to install and use collections.
    :ref:`collections_galaxy_meta`
        Table of fields used in the :file:`galaxy.yml` file 
-   `Mailing List <https://groups.google.com/group/ansible-devel>`_
-       The development mailing list
-   :ref:`communication_irc`
-       How to join Ansible chat channels
+   :ref:`Communication<communication>`
+       Got questions? Need help? Want to share your ideas? Visit the Ansible communication guide

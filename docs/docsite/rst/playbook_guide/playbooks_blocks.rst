@@ -20,6 +20,7 @@ All tasks in a block inherit directives applied at the block level. Most of what
 
   tasks:
     - name: Install, configure, and start Apache
+      when: ansible_facts['distribution'] == 'CentOS'
       block:
         - name: Install httpd and memcached
           ansible.builtin.yum:
@@ -38,7 +39,6 @@ All tasks in a block inherit directives applied at the block level. Most of what
             name: bar
             state: started
             enabled: True
-      when: ansible_facts['distribution'] == 'CentOS'
       become: true
       become_user: root
       ignore_errors: true
@@ -203,7 +203,7 @@ These can be inspected in the ``rescue`` section:
           ansible.builtin.debug:
             msg: All is good, ignore error as grep could not find 'me' in hosts
 
-        - name: All is good if the first task failed
+        - name: All is good if the second task failed
           when: "'/bin/false' in ansible_failed_result.cmd | d([])"
           ansible.builtin.fail:
             msg: It is still false!!!
@@ -218,7 +218,5 @@ These can be inspected in the ``rescue`` section:
        An introduction to playbooks
    :ref:`playbooks_reuse_roles`
        Playbook organization by roles
-   `User Mailing List <https://groups.google.com/group/ansible-devel>`_
-       Have a question?  Stop by the Google group!
-   :ref:`communication_irc`
-       How to join Ansible chat channels
+   :ref:`Communication<communication>`
+       Got questions? Need help? Want to share your ideas? Visit the Ansible communication guide

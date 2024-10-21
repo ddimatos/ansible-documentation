@@ -508,7 +508,7 @@ file gets too big, or when you want to use :ref:`Ansible Vault<playbooks_vault>`
 For ``ansible-playbook`` you can also add ``group_vars/`` and ``host_vars/`` directories to your playbook directory. Other Ansible commands (for example, ``ansible``, ``ansible-console``, and so on) will only look for ``group_vars/`` and ``host_vars/`` in the inventory directory. If you want other commands to load group and host variables from a playbook directory, you must provide the ``--playbook-dir`` option on the command line.
 If you load inventory files from both the playbook directory and the inventory directory, variables in the playbook directory will override variables set in the inventory directory.
 
-Keeping your inventory file and variables in a git repo (or other version control)
+Keeping your inventory file and variables in a Git repo (or other version control)
 is an excellent way to track changes to your inventory and host variables.
 
 .. _how_we_merge:
@@ -587,7 +587,7 @@ ansible_connection
 General for all connections:
 
 ansible_host
-    The name of the host to connect to, if different from the alias you wish to give to it.
+    The name of the host to connect to, if different from the alias you wish to give to it. Never set it to depend on ``inventory_hostname`` if you use delegation.
 ansible_port
     The connection port number, if not the default (22 for ssh)
 ansible_user
@@ -789,7 +789,5 @@ their location.
        Examples of basic commands
    :ref:`working_with_playbooks`
        Learning Ansible's configuration, deployment, and orchestration language.
-   `Mailing List <https://groups.google.com/group/ansible-project>`_
-       Questions? Help? Ideas?  Stop by the list on Google Groups
-   :ref:`communication_irc`
-       How to join Ansible chat channels
+   :ref:`Communication<communication>`
+       Got questions? Need help? Want to share your ideas? Visit the Ansible communication guide

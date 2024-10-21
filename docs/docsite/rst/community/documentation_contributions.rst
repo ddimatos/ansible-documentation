@@ -6,7 +6,7 @@ Contributing to the Ansible Documentation
 
 Ansible has a lot of documentation and a small team of writers. Community support helps us keep up with new features, fixes, and changes.
 
-Improving the documentation is an easy way to make your first contribution to the Ansible project. You do not have to be a programmer, since most of our documentation is written in YAML (module documentation) or `reStructuredText <https://docutils.sourceforge.io/rst.html>`_ (rST). Some collection-level documentation is written in a subset of `Markdown <https://github.com/ansible/ansible/issues/68119#issuecomment-596723053>`_. If you are using Ansible, you already use YAML in your playbooks. rST and Markdown are mostly just text. You do not even need git experience, if you use the ``Edit on GitHub`` option.
+Improving the documentation is an easy way to make your first contribution to the Ansible project. You do not have to be a programmer, since most of our documentation is written in YAML (module documentation) or `reStructuredText <https://docutils.sourceforge.io/rst.html>`_ (rST). Some collection-level documentation is written in a subset of `Markdown <https://github.com/ansible/ansible/issues/68119#issuecomment-596723053>`_. If you are using Ansible, you already use YAML in your playbooks. rST and Markdown are mostly just text. You do not even need Git experience, if you use the ``Edit on GitHub`` option.
 
 If you find a typo, a broken example, a missing topic, or any other error or omission on this documentation website, let us know. Here are some ways to support Ansible documentation:
 
@@ -74,7 +74,7 @@ A great documentation GitHub issue or PR includes:
 Verifying your documentation PR
 ================================
 
-If you make multiple changes to the documentation, or add more than a line to it, before you open a pull request, please:
+If you make multiple changes to the Ansible documentation, or add more than a line to it, before you open a pull request, please:
 
 #. Check that your text follows our :ref:`style_guide`.
 #. Test your changes for rST errors.
@@ -82,7 +82,8 @@ If you make multiple changes to the documentation, or add more than a line to it
 
 .. note::
 
-	The following sections apply to documentation sourced from the ``ansible/ansible-documentation`` repo and does not apply to documentation from an individual collection. See the collection README file for details on how to contribute to that collection.
+	The following sections apply to documentation sourced from the ``ansible/ansible-documentation`` repo and does not apply to documentation from an individual collection. See the collection README file for details on how to contribute to that collection. Collection developers can also lint their collection-level documentation. See :ref:`verify_collection_docs` for details.
+   
 
 Setting up your environment to build documentation locally
 ----------------------------------------------------------
@@ -113,6 +114,11 @@ For more information on minimum Python versions, see the :ref:`support matrix <s
     pip install -r tests/requirements.in -c tests/requirements.txt # Installs tested dependency versions.
     pip install -r tests/requirements.in # Installs the unpinned dependency versions.
     pip install -r tests/requirements-relaxed.in # Installs the unpinned dependency versions including untested antsibull-docs.
+
+
+.. note::
+
+  	After checking out ``ansible/ansible-documentation``, make sure the ``docs/docsite/rst`` directory has strict enough permissions. It should only be writable by the owner's account. If your default ``umask`` is not 022, you can use ``chmod go-w docs/docsite/rst`` to set the permissions correctly in your new branch. Optionally, you can set your ``umask`` to 022 to make all newly created files on your system (including those created by ``git clone``) have the correct permissions.
 
 .. _testing_documentation_locally:
 
@@ -227,7 +233,7 @@ It is recommended to run tests on a clean copy of the repository, which is the p
 Joining the documentation working group
 =======================================
 
-The Documentation Working Group (DaWGs) meets weekly on Tuesdays in the Docs chat (using `Matrix <https://matrix.to/#/#docs:ansible.im>`_ or using IRC at `irc.libera.chat <https://libera.chat/>`_). For more information, including links to our agenda and a calendar invite, visit our `forum group <https://forum.ansible.com/g/Docs>`_.
+The Documentation Working Group (DaWGs) meets weekly on Tuesdays in the `docs:ansible.im chat room <https://matrix.to/#/#docs:ansible.im>`_ on :ref:`Matrix<communication_irc>`. For more information, including links to our agenda, visit our `forum group <https://forum.ansible.com/g/Docs>`_.
 
 .. seealso::
    :ref:`More about testing module documentation <testing_module_documentation>`

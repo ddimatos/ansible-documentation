@@ -194,7 +194,7 @@ Installing Ansible to containers
 ================================
 
 Instead of installing Ansible content manually, you can simply build an execution environment container image or use one of the available community images as your control node.
-See the `Getting started with Execution Environments guide <https://ansible.readthedocs.io/en/latest/getting_started_ee/index.html>`_ for details.
+See :ref:`getting_started_ee_index` for details.
 
 .. _development_install:
 
@@ -346,7 +346,7 @@ If you do not have bash 4.2, you must register each script independently.
     $ eval $(register-python-argcomplete ansible-pull)
     $ eval $(register-python-argcomplete ansible-vault)
 
-You should place the above commands into your shells profile file such as ``~/.profile`` or ``~/.bash_profile``.
+You should place the above commands into your shell's profile file such as ``~/.profile`` or ``~/.bash_profile``.
 
 Using ``argcomplete`` with zsh or tcsh
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

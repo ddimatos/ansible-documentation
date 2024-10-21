@@ -70,16 +70,18 @@ John Barker (`gundalow <https://github.com/gundalow>`_) has been elected by the 
 
 Committee members are selected based on their active contribution to the Ansible Project and its community. See :ref:`community_steering_guidelines` to learn details.
 
+.. _creating_community_topic:
+
 Creating new policy proposals & inclusion requests
 ----------------------------------------------------
 
 The Committee uses the `Ansible Forum <https://forum.ansible.com/>`_ to asynchronously discuss with the Community and vote on the proposals in corresponding `community topics <https://forum.ansible.com/tags/c/project/7/community-wg>`_.
 
-You can create a `community topic <https://forum.ansible.com/new-topic?category=project&tags=community-wg>`_ if you want to discuss an idea that impacts any of the following:
+You can `create a community topic <https://forum.ansible.com/new-topic?category=project&tags=community-wg>`_ (make sure you use the ``Project Discussions`` category and the ``community-wg`` tag) if you want to discuss an idea that impacts any of the following:
 
   * Ansible Community
   * Community collection best practices and requirements
-  * Community collection inclusion policy
+  * Community collection inclusion/exclusion policy and workflow
   * The Community governance
   * Other proposals of importance that need the Committee's or overall Ansible community attention
 
@@ -96,7 +98,10 @@ Depending on a topic you want to discuss with the Community and the Committee, a
 
 * :ref:`code_of_conduct`.
 * :ref:`collections_requirements`.
-* `Ansible Collection Inclusion Checklist <https://github.com/ansible-collections/overview/blob/main/collection_checklist.md>`_.
+* `Ansible Collection Inclusion Checklist <https://github.com/ansible-collections/ansible-inclusion/blob/main/collection_checklist.md>`_.
+* :ref:`removal_from_ansible`.
+
+.. _community_topics_workflow:
 
 Community topics workflow
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -142,25 +147,38 @@ When reviewing community collection `inclusion requests <https://github.com/ansi
 
   The Steering Committee can reject a collection inclusion request or exclude a collection from the Ansible package even when the collection satisfies the requirements if the Steering Committee agrees that presence of the collection will significantly deteriorate the Ansible package user experience or the package build process. In case of rejection/removal, the collection maintainers receive comprehensive feedback from the Committee explaining the reasons of starting the process. In case the reasons are fixable, the feedback will contain information what the maintainers need to change.
 
-#. A Committee member who conducts the inclusion review copies the `Ansible community collection checklist <https://github.com/ansible-collections/overview/blob/main/collection_checklist.md>`_ into a corresponding `discussion <https://github.com/ansible-collections/ansible-inclusion/discussions>`_.
+#. A Committee member who conducts the inclusion review copies the `Ansible community collection checklist <https://github.com/ansible-collections/ansible-inclusion/blob/main/collection_checklist.md>`_ into a corresponding `discussion <https://github.com/ansible-collections/ansible-inclusion/discussions>`_.
 
 #. In the course of the review, the Committee member marks items as completed or leaves a comment saying whether the reviewer expects an issue to be addressed or whether it is optional (for example, it could be **MUST FIX:** <what> or **SHOULD FIX:** <what> under an item).
 
 #. For a collection to be included in the Ansible community package, the collection:
 
-  * MUST be reviewed and approved by at least two persons, where at least one person is a Steering Committee member.
-  * For a Non-Steering Committee review to be counted for inclusion, it MUST be checked and approved by *another* Steering Committee member.
-  * Reviewers must not be involved significantly in development of the collection. They must declare any potential conflict of interest (for example, being friends/relatives/coworkers of the maintainers/authors, being users of the collection, or having contributed to that collection recently or in the past).
+  * MUST be reviewed and approved as compliant with the requirements by at least two Steering Committee members.
 
-#. After the collection gets two or more Committee member approvals, a Committee member creates a `community topic <https://forum.ansible.com/new-topic?category=project&tags=community-wg>`_ linked to the corresponding inclusion request. The issue's description says that the collection has been approved by two or more Committee members and establishes a date (a week by default) when the inclusion decision will be considered made. This time period can be used to raise concerns.
+    * At least one of the reviews checks compliance with the entire checklist.
+    * All subsequent reviews can focus only on compliance with documentation and development conventions.
 
-#. If no objections are raised up to the established date, the inclusion request is considered successfully resolved. In this case, a Committee member:
+  * Reviewers must not be involved significantly in development of the collection. They MUST declare any potential conflict of interest (for example, being friends/relatives/coworkers of the maintainers/authors, being users of the collection, or having contributed to that collection recently or in the past).
+
+#. After the collection gets two Committee member approvals, a Committee member creates a `community topic <https://forum.ansible.com/new-topic?category=project&tags=community-wg>`_ linked to the corresponding inclusion request. The issue's description says that the collection has been approved by the Committee and establishes a date (a week by default) when the inclusion decision will be considered made.
+
+  * The inclusion automatically gets suspended if the Committee members raise concerns or start another inclusion review within this time period.
+  * When there are no more objections or ongoing inclusion reviews, the inclusion date gets prolonged for another week.
+
+#. If the inclusion has not been suspended by the established date, the inclusion request is considered successfully resolved. In this case, a Committee member:
 
   #. Declares the decision in the topic and in the inclusion request.
   #. Moves the request to the ``Resolved reviews`` category.
   #. Adds the collection to the ``ansible.in`` file in a corresponding directory of the `ansible-build-data repository <https://github.com/ansible-community/ansible-build-data>`_.
   #. Announces the inclusion through the `Bullhorn newsletter <https://forum.ansible.com/c/news/bullhorn/17>`_.
   #. Closes the topic.
+
+Collection exclusion workflow
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The Committee uses the :ref:`removal_from_ansible` to remove collections not satisfying the :ref:`collections_requirements` from the Ansible package. 
+
+.. _community_wg_meetings:
 
 Community Working Group meetings
 ---------------------------------

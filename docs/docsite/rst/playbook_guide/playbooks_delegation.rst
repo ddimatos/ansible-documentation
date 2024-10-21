@@ -177,9 +177,5 @@ use the default remote connection type:
        An introduction to playbooks
    :ref:`playbooks_strategies`
        More ways to control how and where Ansible executes
-   `Ansible Examples on GitHub <https://github.com/ansible/ansible-examples>`_
-       Many examples of full-stack deployments
-   `User Mailing List <https://groups.google.com/group/ansible-devel>`_
-       Have a question?  Stop by the Google group!
-   :ref:`communication_irc`
-       How to join Ansible chat channels
+   :ref:`Communication<communication>`
+       Got questions? Need help? Want to share your ideas? Visit the Ansible communication guide

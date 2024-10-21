@@ -183,7 +183,7 @@ Long pages, or pages with multiple levels of headings, can also include a local 
 
 .. note::
 
-	Avoid raw URLs. RST and sphinx allow ::code:`https://my.example.com`, but this is unhelpful for those using screen readers. ``:ref:`` links automatically pick up the heading from the anchor, but for external links, always use the ::code:`link title <link-url>`_` format.
+	Avoid raw URLs. RST and sphinx allow :code:`https://my.example.com`, but this is unhelpful for those using screen readers. ``:ref:`` links automatically pick up the heading from the anchor, but for external links, always use the :code:`\`link title <link-url>\`_` format.
 
 .. _adding_anchors_rst:
 
@@ -481,5 +481,5 @@ These pages offer more help with grammatical, stylistic, and technical rules for
        How to contribute to the Ansible documentation
    :ref:`testing_documentation_locally`
        How to build the Ansible documentation
-   `irc.libera.chat <https://libera.chat>`_
-       #ansible-docs IRC chat channel
+   :ref:`Communication<communication>`
+       Got questions? Need help? Want to share your ideas? Visit the Ansible communication guide

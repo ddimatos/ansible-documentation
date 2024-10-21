@@ -204,7 +204,7 @@ Ansible Collections are tested much like Ansible itself, by using the `ansible-t
 
 See :ref:`testing_collections` for specific information on how to test collections with ``ansible-test``.
 
-When reading the :ref:`developing_testing` documentation, there will be content that applies to running Ansible from source code through a git clone, which is typical of an Ansible developer. However, it is not always typical for an Ansible Collection author to be running Ansible from source but instead from a stable release, and to create Collections it is not necessary to run Ansible from source. Therefore, when references of dealing with `ansible-test` binary paths, command completion, or environment variables are presented throughout the :ref:`developing_testing` documentation; keep in mind that it is not needed for Ansible Collection Testing because the act of installing the stable release of Ansible containing `ansible-test` is expected to setup those things for you.
+When reading the :ref:`developing_testing` documentation, there will be content that applies to running Ansible from source code through a Git clone, which is typical of an Ansible developer. However, it is not always typical for an Ansible Collection author to be running Ansible from source but instead from a stable release, and to create Collections it is not necessary to run Ansible from source. Therefore, when references of dealing with `ansible-test` binary paths, command completion, or environment variables are presented throughout the :ref:`developing_testing` documentation; keep in mind that it is not needed for Ansible Collection Testing because the act of installing the stable release of Ansible containing `ansible-test` is expected to setup those things for you.
 
 
 meta directory
@@ -290,7 +290,7 @@ execution_environments.yml
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 If your collection has requirements, you can specify them in the ``execution-environment.yml`` file  in the ``meta`` directory.
-This ensures users do not need to add these requirements manually when building `Execution Environments <https://ansible.readthedocs.io/en/latest/getting_started_ee/index.html>`_ containing your collection.
+This ensures users do not need to add these requirements manually when building :ref:`Execution Environments<getting_started_ee_index>` containing your collection.
 See the `collection-level metadata guide <https://ansible.readthedocs.io/projects/builder/en/stable/collection_metadata/#collection-level-metadata>`_ for details.
 
 .. seealso::
@@ -299,7 +299,5 @@ See the `collection-level metadata guide <https://ansible.readthedocs.io/project
         Learn how to package and publish your collection
    :ref:`contributing_maintained_collections`
         Guidelines for contributing to selected collections
-   `Mailing List <https://groups.google.com/group/ansible-devel>`_
-        The development mailing list
-   :ref:`communication_irc`
-        How to join Ansible chat channels
+   :ref:`Communication<communication>`
+       Got questions? Need help? Want to share your ideas? Visit the Ansible communication guide

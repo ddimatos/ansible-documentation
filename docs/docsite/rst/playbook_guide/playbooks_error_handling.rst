@@ -116,13 +116,13 @@ You can also combine multiple conditions for failure. This task will fail if bot
       register: result
       failed_when:
         - result.rc == 0
-        - '"No such" not in result.stdout'
+        - '"No such" not in result.stderr'
 
 If you want the task to fail when only one condition is satisfied, change the ``failed_when`` definition to
 
 .. code-block:: yaml
 
-      failed_when: result.rc == 0 or "No such" not in result.stdout
+      failed_when: result.rc == 0 or "No such" not in result.stderr
 
 If you have too many conditions to fit neatly into one line, you can split it into a multi-line YAML value with ``>``.
 
@@ -277,7 +277,5 @@ You can also use blocks to define responses to task errors. This approach is sim
        Conditional statements in playbooks
    :ref:`playbooks_variables`
        All about variables
-   `User Mailing List <https://groups.google.com/group/ansible-devel>`_
-       Have a question?  Stop by the Google group!
-   :ref:`communication_irc`
-       How to join Ansible chat channels
+   :ref:`Communication<communication>`
+       Got questions? Need help? Want to share your ideas? Visit the Ansible communication guide

@@ -132,7 +132,7 @@ These tips apply to using Ansible, rather than to Ansible artifacts.
 Use Execution Environments
 --------------------------
 
-Reduce complexity with portable container images known as `Execution Environments <https://ansible.readthedocs.io/en/latest/getting_started_ee/index.html>`_.
+Reduce complexity with portable container images known as :ref:`Execution Environments<getting_started_ee_index>`.
 
 Try it in staging first
 -----------------------
@@ -206,7 +206,5 @@ This pulls in variables from the `group_vars/os_CentOS.yml` file.
        Learn how to extend Ansible by writing your own modules
    :ref:`intro_patterns`
        Learn about how to select hosts
-   `GitHub examples directory <https://github.com/ansible/ansible-examples>`_
-       Complete playbook files from the GitHub project source
-   `Mailing List <https://groups.google.com/group/ansible-project>`_
-       Questions? Help? Ideas?  Stop by the list on Google Groups
+   :ref:`Communication<communication>`
+       Got questions? Need help? Want to share your ideas? Visit the Ansible communication guide

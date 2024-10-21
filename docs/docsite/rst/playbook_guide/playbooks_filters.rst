@@ -27,7 +27,7 @@ You can provide default values for variables directly in your templates using th
 
     {{ some_variable | default(5) }}
 
-In the above example, if the variable 'some_variable' is not defined, Ansible uses the default value 5, rather than raising an "undefined variable" error and failing. If you are working within a role, you can also add a ``defaults/main.yml`` to define the default values for variables in your role.
+In the above example, if the variable 'some_variable' is not defined, Ansible uses the default value 5, rather than raising an "undefined variable" error and failing. If you are working within a role, you can also add role defaults to define the default values for variables in your role. To learn more about role defaults see :ref:`Role directory structure <role_directory_structure>`.
 
 Beginning in version 2.8, attempting to access an attribute of an Undefined value in Jinja will return another Undefined value, rather than throwing an error immediately. This means that you can now simply use
 a default with a value in a nested data structure (in other words, :code:`{{ foo.bar.baz | default('DEFAULT') }}`) when you do not know if the intermediate values are defined.
@@ -115,6 +115,29 @@ If you are unsure of the underlying Python type of a variable, you can use the :
     {{ myvar | type_debug }}
 
 You should note that, while this may seem like a useful filter for checking that you have the right type of data in a variable, you should often prefer :ref:`type tests <type_tests>`, which will allow you to test for specific data types.
+
+Transforming strings into lists
+-------------------------------
+
+Use the :ansplugin:`ansible.builtin.split#filter` filter to transform a character/string delimited string into a list of items suitable for :ref:`looping <playbooks_loops>`. For example, if you want to split a string variable `fruits` by commas, you can use:
+
+.. code-block:: yaml+jinja
+
+    {{ fruits | split(',') }}
+
+String data (before applying the :ansplugin:`ansible.builtin.split#filter` filter):
+
+.. code-block:: yaml
+
+    fruits: apple,banana,orange
+
+List data (after applying the :ansplugin:`ansible.builtin.split#filter` filter):
+
+.. code-block:: yaml
+
+    - apple
+    - banana
+    - orange
 
 .. _dict_filter:
 
@@ -2216,9 +2239,7 @@ This can then be used to reference hashes in Pod specifications:
        Playbook organization by roles
    :ref:`tips_and_tricks`
        Tips and tricks for playbooks
-   `User Mailing List <https://groups.google.com/group/ansible-devel>`_
-       Have a question?  Stop by the Google group!
-   :ref:`communication_irc`
-       How to join Ansible chat channels
+   :ref:`Communication<communication>`
+       Got questions? Need help? Want to share your ideas? Visit the Ansible communication guide
    `Python 3 Regular expression operations <https://docs.python.org/3/library/re.html>`_
        How to use inline regular expression flags

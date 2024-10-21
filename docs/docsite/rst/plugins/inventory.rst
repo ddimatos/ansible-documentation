@@ -36,8 +36,9 @@ Or, if it is a local plugin, perhaps stored in the path set by :ref:`DEFAULT_INV
 
    [inventory]
    enable_plugins = host_list, script, auto, yaml, ini, toml, my_plugin
-   
+
 If you use a plugin that supports a YAML configuration source, make sure that the name matches the name provided in the ``plugin`` entry of the inventory source file.
+For other plugins you must either save it in one of the directory sources configured in :ref:`ansible.cfg <ansible_configuration_settings>` and enable it or add to a collection and then reference it by FQCN.
 
 .. _using_inventory:
 
@@ -184,7 +185,5 @@ Use ``ansible-doc -t inventory <plugin name>`` to see plugin-specific documentat
        Lookup plugins
    :ref:`vars_plugins`
        Vars plugins
-   `User Mailing List <https://groups.google.com/group/ansible-devel>`_
-       Have a question?  Stop by the Google group!
-   :ref:`communication_irc`
-       How to join Ansible chat channels
+   :ref:`Communication<communication>`
+       Got questions? Need help? Want to share your ideas? Visit the Ansible communication guide

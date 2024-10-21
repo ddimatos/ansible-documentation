@@ -62,10 +62,10 @@ You define an anchor with ``&``, then refer to it using an alias, denoted with `
           opts: '-Xms1G -Xmx2G'
           port: 1000
           path: /usr/lib/app1
-        app2:
-          jvm:
-            <<: *jvm_opts
-            path: /usr/lib/app2
+      app2:
+        jvm:
+          <<: *jvm_opts
+          path: /usr/lib/app2
     ...
 
 Here, ``app1`` and ``app2`` share the values for ``opts`` and ``port`` using the anchor ``&jvm_opts`` and the alias ``*jvm_opts``.
@@ -116,7 +116,5 @@ You've anchored the value of ``version`` with the ``&my_version`` anchor and reu
        All about variables
    :ref:`complex_data_manipulation`
        Doing complex data manipulation in Ansible
-   `User Mailing List <https://groups.google.com/group/ansible-project>`_
-       Have a question?  Stop by the Google group!
-   :ref:`communication_irc`
-       How to join Ansible chat channels
+   :ref:`Communication<communication>`
+       Got questions? Need help? Want to share your ideas? Visit the Ansible communication guide

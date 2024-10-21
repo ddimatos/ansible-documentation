@@ -167,7 +167,7 @@ You can register the output of a loop as a variable. For example
        - "two"
      register: echo
 
-When you use ``register`` with a loop, the data structure placed in the variable will contain a ``results`` attribute that is a list of all responses from the module. This differs from the data structure returned when using ``register`` without a loop.
+When you use ``register`` with a loop, the data structure placed in the variable will contain a ``results`` attribute that is a list of all responses from the module. This differs from the data structure returned when using ``register`` without a loop. The ``changed``/``failed``/``skipped`` attribute that's beside the ``results`` will represent the overall state. ``changed``/``failed`` will be `true` if at least one of the iterations triggered a change/failed, while ``skipped`` will be `true` only if all iterations were skipped.
 
 .. code-block:: json
 
@@ -254,7 +254,29 @@ To see the results of individual retries, run the play with ``-vv``.
 
 When you run a task with ``until`` and register the result as a variable, the registered variable will include a key called "attempts", which records the number of retries for the task.
 
-If ``until`` is not specified, the task will retry until the task succeeds but at most ``retries`` times.
+If ``until`` is not specified, the task will retry until the task succeeds but at most ``retries`` times (New in version 2.16).
+
+You can combine the ``until`` keyword with ``loop`` or ``with_<lookup>``. The result of the task for each element of the loop is registered in the variable and can be used in the ``until`` condition. Here is an example:
+
+.. code-block:: yaml
+
+    - name: Retry combined with a loop
+      uri:
+        url: "https://{{ item }}.ansible.com"
+        method: GET
+      register: uri_output
+      with_items:
+      - "galaxy"
+      - "docs"
+      - "forum"
+      - "www"
+      retries: 2
+      delay: 1
+      until: "uri_output.status == 200"
+
+.. note::
+
+   When you use the ``timeout`` keyword in a loop, it applies to each attempt of the task action. See :ref:`TASK_TIMEOUT <TASK_TIMEOUT>` for more details.
 
 .. _loop_over_inventory:
 
@@ -365,6 +387,33 @@ To control the time (in seconds) between the execution of each item in a task lo
       loop_control:
         pause: 3
 
+Breaking out of a loop
+----------------------
+.. versionadded:: 2.18
+
+Use the ``break_when`` directive with ``loop_control`` to exit a loop after any item, based on Jinja2 expressions.
+
+.. code-block:: yaml+jinja
+
+   # main.yml
+   - name: Use set_fact in a loop until a condition is met
+     vars:
+       special_characters: "!@#$%^&*(),.?:{}|<>"
+       character_set: "digits,ascii_letters,{{ special_characters }}"
+       password_policy: '^(?=.*\d)(?=.*[A-Z])(?=.*[{{ special_characters | regex_escape }}]).{12,}$'
+     block:
+       - name: Generate a password until it contains a digit, uppercase letter, and special character (10 attempts)
+         set_fact:
+           password: "{{ lookup('password', '/dev/null', chars=character_set, length=12) }}"
+         loop: "{{ range(0, 10) }}"
+         loop_control:
+           break_when:
+             - password is match(password_policy)
+
+       - fail:
+           msg: "Maximum attempts to generate a valid password exceeded"
+         when: password is not match(password_policy)
+
 Tracking progress through a loop with ``index_var``
 ---------------------------------------------------
 .. versionadded:: 2.5
@@ -471,7 +520,7 @@ To avoid this, you can specify the name of the variable for each loop using ``lo
 .. code-block:: yaml+jinja
 
     # main.yml
-    - include_task: inner.yml
+    - include_tasks: inner.yml
       loop:
         - 1
         - 2
@@ -566,7 +615,5 @@ Migrating from with_X to loop
        Conditional statements in playbooks
    :ref:`playbooks_variables`
        All about variables
-   `User Mailing List <https://groups.google.com/group/ansible-devel>`_
-       Have a question?  Stop by the Google group!
-   :ref:`communication_irc`
-       How to join Ansible chat channels
+   :ref:`Communication<communication>`
+       Got questions? Need help? Want to share your ideas? Visit the Ansible communication guide

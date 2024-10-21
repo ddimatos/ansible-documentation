@@ -79,6 +79,11 @@ The `nox` configuration also contains session to run automated docs checkers.
   nox -s lint
   ```
 
+  The `actionlint` linter that is run as part of the `lint` session requires
+  `podman` or `docker` to be installed.
+  If both container engines are installed, `podman` is preferred.
+  Set `CONTAINER_ENGINE=docker` to change this behavior.
+
 ### Checking spelling
 
 Use [`codespell`](https://github.com/codespell-project/codespell) to check for common spelling mistakes in the documentation source.
@@ -109,7 +114,7 @@ The lock files contain tested dependencies that are automatically updated on a w
 
 If you'd like to use untested dependencies, set `PINNED=false` as in the following example:
 
-```
+```bash
 PINNED=false nox -s "checkers(docs-build)"
 ```
 
@@ -136,3 +141,27 @@ If you do not have Python 3.10 installed, you can use root-less podman with a Py
 ```bash
 podman run --rm --tty --volume "$(pwd):/mnt:z" --workdir /mnt docker.io/library/python:3.10 bash -c 'pip install nox ; nox -s pip-compile'
 ```
+
+## Creating release tags
+
+When a tag is created in the [`ansible/ansible`](https://github.com/ansible/ansible) repository for a release or release candidate, a corresponding tag should be created in this `ansible-documentation` repository.
+
+First, ensure that you have the [`ansible/ansible`](https://github.com/ansible/ansible) and [`ansible/ansible-documentation`](https://github.com/ansible/ansible-documentation) repositories checked out.
+The tool assumes that both checkouts have the same parent directory. You can set different paths to your checkouts with the `--docs` and `--core` options if you have them set up another way.
+
+Next, run the `tag` `nox` session.
+
+This will determine any missing `ansible-core` tags and create them in `ansible-documentation` if needed, exiting normally otherwise:
+
+``` bash
+# The tagger scripts assumes "origin" as the upstream remote.
+nox -s tag
+
+# If you use a different upstream remote, specify the name.
+nox -s tag -- --remote <name> tag
+
+# If your core repo is not in the same filesystem location, specify the path.
+nox -s tag -- --core <path> tag
+```
+
+See `nox -s tag -- --help` for extended options.
