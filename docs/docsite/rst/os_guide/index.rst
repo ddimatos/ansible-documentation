@@ -1,7 +1,7 @@
 .. _os_guide_index:
 
 ################################
-Using Ansible on Windows and BSD
+Using Ansible on Windows, z/OS and BSD
 ################################
 
 .. note::
