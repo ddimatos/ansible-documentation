@@ -11,26 +11,23 @@ Ansible can connect to UNIX Systems Services to bring your Ansible Automation st
 
 Ansible and UNIX Systems Services
 ---------------------------------
-USS is POSIX compliant, so it can support Ansible dependencies like making SSH connections, spawning shell processes, and python. 
-With these things, Ansible can be run on USS to modify files, directories, etc. 
-Anything that one could do by SSH-ing into USS and typing can be captured and automated in an Ansible playbook.
+UNIX Systems Services is POSIX compliant, so it can support Ansible dependencies like making SSH connections, spawning shell processes, and python.
+With these things, Ansible can be run on UNIX Systems Services to modify files, directories, etc.
+Anything that one could do by SSH-ing into UNIX Systems Services and typing can be captured and automated in an Ansible playbook.
 
 For additional functionality with z/OS managed nodes, check out the `Red Hat Certified Content for IBM Z <https://ibm.github.io/z_ansible_collections_doc/>`_.
 To learn more about z/OS managed nodes, see `Red Hat Certified Content for IBM Z <https://ibm.github.io/z_ansible_collections_doc/>`_.
 
 
-Dealing with EBCDIC
+The z/OS Landscape
 -------------------
-USS files largely come in three flavors - binary, utf-8 encoded text, and ebcdic-encoded text.
+UNIX Systems Services files largely come in three flavors - binary, utf-8 encoded text, and ebcdic-encoded text.
 Ansible has provisions to handle binary and UTF-8, but not EBCDIC. 
 It is up to the Ansible user managing z/OS nodes to understand which files may be affected.
 This is not necessarily a limitation, it simply requires additional steps in defining additional tasks convert files to/from their original encodings.
 
 
-File Tags
----------
-
-This is a z/OS Unix Systems Services concept (part of enhanced ASCII) established to distinguish binary files from utf-8 encoded text files and ebcdic-encoded text files.
+Tagging files is a z/OS Unix Systems Services concept (part of enhanced ASCII) established to distinguish binary files from utf-8 encoded text files and ebcdic-encoded text files.
 
 The type (binary or text) and encoding of the data can be stored in a tag (a feature of enhanced ASCII). 
 Default behavior for an un-tagged file or stream is determined by the program, for example, 
@@ -42,15 +39,12 @@ Ansible modules will not do this automatically, but you do it yourself with an a
     - name: tag my_file.txt as ibm-1047 ebcdic.
       ansible.builtin.command: chtag -tc ibm1047 my_file.txt
 
-idk
----
 
 This means that data sent to remote z/OS nodes is encoded in UTF-8 and is not tagged.
 The z/OS UNIX remote shell defaults to an EBCDIC encoding for un-tagged data streams. 
 This mismatch in data encodings can be resolved with the ``PYTHONSTDINENCODING`` environment variable,
 which tags the pipe with the encoding specified. 
 File and pipe tags are used for automatic conversion between ASCII and EBCDIC.
-
 
 
 Using Ansible Community Modules with z/OS
