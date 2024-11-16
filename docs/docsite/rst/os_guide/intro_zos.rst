@@ -11,53 +11,58 @@ Ansible can connect to UNIX Systems Services to bring your Ansible Automation st
 
 Ansible and UNIX Systems Services
 ---------------------------------
-UNIX Systems Services is POSIX compliant, so it can support Ansible dependencies like making SSH connections, spawning shell processes, and python.
-With these things, Ansible can be run on UNIX Systems Services to modify files, directories, etc.
-Anything that one could do by SSH-ing into UNIX Systems Services and typing can be captured and automated in an Ansible playbook.
+UNIX Systems Services can support the required dependencies of an Ansible managed node including running python and spawning interactive shell processes through an SSH connection.
+Ansible can run against UNIX Systems Services to modify files, directories, etc. through built-in Ansible community modules. Further, 
+anything that one can do by typing command(s) into shell can be captured and automated in an Ansible playbook.
 
-For additional functionality with z/OS managed nodes, check out the `Red Hat Certified Content for IBM Z <https://ibm.github.io/z_ansible_collections_doc/>`_.
 To learn more about z/OS managed nodes, see `Red Hat Certified Content for IBM Z <https://ibm.github.io/z_ansible_collections_doc/>`_.
 
 
 The z/OS Landscape
 -------------------
-UNIX Systems Services files largely come in three flavors - binary, utf-8 encoded text, and ebcdic-encoded text.
-Ansible has provisions to handle binary and UTF-8, but not EBCDIC. 
-It is up to the Ansible user managing z/OS nodes to understand which files may be affected.
-This is not necessarily a limitation, it simply requires additional steps in defining additional tasks convert files to/from their original encodings.
+While most of the rest of the world processes files in two modes - binary or utf8 encoded text, IBM Z and UNIX Systems Services files come in an additional third flavor - ebcdic-encoded text.
+Ansible has provisions to handle binary and UTF-8, but not EBCDIC. This is not necessarily a limitation, it simply requires additional steps in defining additional tasks convert files to/from their original encodings.
+It is up to the Ansible user managing z/OS nodes to understand the nature of the files in their automation.
 
+The type (binary or text) and encoding of files can be stored in "tags". File tags is a z/OS UNIX Systems Services concept (part of enhanced ASCII) which was established to distinguish binary files from utf-8 encoded text files and ebcdic-encoded text files.
 
-Tagging files is a z/OS Unix Systems Services concept (part of enhanced ASCII) established to distinguish binary files from utf-8 encoded text files and ebcdic-encoded text files.
-
-The type (binary or text) and encoding of the data can be stored in a tag (a feature of enhanced ASCII). 
 Default behavior for an un-tagged file or stream is determined by the program, for example, 
 `IBM Open Enterprise SDK for Python <https://www.ibm.com/products/open-enterprise-python-zos>`__ defaults to the UTF-8 encoding.
 
-Ansible modules will not do this automatically, but you do it yourself with an additional task using the builtin.command module.
+Ansible modules will not read or honor any file tag. It is up to the user to check the tags of remote files with an additional task using the builtin.command module and apply any necessary encoding conversion.
 
 .. code-block::
     - name: tag my_file.txt as ibm-1047 ebcdic.
       ansible.builtin.command: chtag -tc ibm1047 my_file.txt
 
 
-This means that data sent to remote z/OS nodes is encoded in UTF-8 and is not tagged.
+Data sent to remote z/OS nodes is by default encoded in UTF-8 and is not tagged.
 The z/OS UNIX remote shell defaults to an EBCDIC encoding for un-tagged data streams. 
 This mismatch in data encodings can be resolved with the ``PYTHONSTDINENCODING`` environment variable,
 which tags the pipe with the encoding specified. 
-File and pipe tags are used for automatic conversion between ASCII and EBCDIC.
+File and pipe tags are used for automatic conversion between ASCII and EBCDIC. But only by programs which are aware of tags and honor them.
 
 
 Using Ansible Community Modules with z/OS
 -----------------------------------------
 
-The ansible core engine is unaware of tags in z/OS UNIX and thus processes all data as either binary or text encoded in UTF-8.
+The Ansible core engine processes all data as either binary or text encoded in UTF-8.
 The Ansible community modules assume all data (files and pipes/streams) is utf-8 encoded (if not binary).
 
-On z/OS, data (file or stream) is found in one of three ways: binary, as text encoded in UTF-8, or as text encoded in EBCDIC.
+On z/OS, since data (file or stream) is sometimes text encoded in EBCDIC, special care must be taken.
 
 Here are some notes / pro-tips when using the community modules with z/OS. This is by no means a comprehensive list.
 
 * ansible.builtin.command / ansible.builtin.shell
+
+    The default Z shell (/bin/sh) will return output in EBCDIC, but the LE variables will convert that stream and make output look sensible on the Ansible side.
+    However, some command line programs may return output in UTF-8 and not tag the pipe, in this case, the autoconversion may assume output is in EBCDIC and attempt to convert it.
+    The command module allows for piped commands, try piping the output through a call to iconv.
+
+    .. code-block:: yaml
+
+        ansible.builtin.command: "some_pgm | iconv -f ibm-1047 -t iso8859-1"
+
 
 * ansible.builtin.raw
 
@@ -78,6 +83,7 @@ Here are some notes / pro-tips when using the community modules with z/OS. This 
 
 * ansible.builtin.copy / ansible.builtin.fetch
     The built in community modules will NOT automatically tag files, nor will existing file tags be honored nor preserved.
+    You can treat files as binaries when running copy/fetch operations, there is no issue in terms of data integrity, just remember to restore the correct tag and encoding once the file is returned to z/OS, as that data will not be stored for you.
 
 * ansible.builtin.blockinfile / ansible.builtin.lineinfile
     These modules process all data in UTF-8, so be sure to convert files before and re-tag the resulting files after.
