@@ -11,8 +11,8 @@ Ansible can connect to UNIX Systems Services to bring your Ansible Automation st
 
 Ansible and UNIX Systems Services
 ---------------------------------
-UNIX Systems Services can support the required dependencies of an Ansible managed node including running python and spawning interactive shell processes through an SSH connection.
-Ansible can run against UNIX Systems Services to modify files, directories, etc. through built-in Ansible community modules. Further, 
+UNIX Systems Services can support the required dependencies for an Ansible managed node including running python and spawning interactive shell processes through an SSH connection.
+Ansible can target UNIX Systems Services nodes to modify files, directories, etc. through built-in Ansible community modules. Further, 
 anything that one can do by typing command(s) into shell can be captured and automated in an Ansible playbook.
 
 To learn more about z/OS managed nodes, see `Red Hat Certified Content for IBM Z <https://ibm.github.io/z_ansible_collections_doc/>`_.
@@ -20,8 +20,9 @@ To learn more about z/OS managed nodes, see `Red Hat Certified Content for IBM Z
 
 The z/OS Landscape
 -------------------
-While most of the rest of the world processes files in two modes - binary or utf8 encoded text, IBM Z and UNIX Systems Services files come in an additional third flavor - ebcdic-encoded text.
-Ansible has provisions to handle binary and UTF-8, but not EBCDIC. This is not necessarily a limitation, it simply requires additional steps in defining additional tasks convert files to/from their original encodings.
+While most systems process files in two modes - binary or utf8 encoded text, IBM Z and UNIX Systems Services features an additional third flavor - ebcdic-encoded text.
+Ansible has provisions to handle binary data and UTF-8 encoded textual data, but not data encoded in EBCDIC.
+This is not necessarily a limitation, it simply requires additional steps in defining additional tasks convert files to/from their original encodings.
 It is up to the Ansible user managing z/OS nodes to understand the nature of the files in their automation.
 
 The type (binary or text) and encoding of files can be stored in "tags". File tags is a z/OS UNIX Systems Services concept (part of enhanced ASCII) which was established to distinguish binary files from utf-8 encoded text files and ebcdic-encoded text files.
@@ -29,7 +30,7 @@ The type (binary or text) and encoding of files can be stored in "tags". File ta
 Default behavior for an un-tagged file or stream is determined by the program, for example, 
 `IBM Open Enterprise SDK for Python <https://www.ibm.com/products/open-enterprise-python-zos>`__ defaults to the UTF-8 encoding.
 
-Ansible modules will not read or honor any file tag. It is up to the user to check the tags of remote files with an additional task using the builtin.command module and apply any necessary encoding conversion.
+Ansible modules will not read or honor any file tags. It is up to the user to determine the nature of remote data. This is achieveable with an additional task using the ``builtin.command`` module and apply any necessary encoding conversion.
 
 .. code-block::
     - name: tag my_file.txt as ibm-1047 ebcdic.
@@ -40,14 +41,14 @@ Data sent to remote z/OS nodes is by default encoded in UTF-8 and is not tagged.
 The z/OS UNIX remote shell defaults to an EBCDIC encoding for un-tagged data streams. 
 This mismatch in data encodings can be resolved with the ``PYTHONSTDINENCODING`` environment variable,
 which tags the pipe with the encoding specified. 
-File and pipe tags are used for automatic conversion between ASCII and EBCDIC. But only by programs which are aware of tags and honor them.
+File and pipe tags can be used for automatic conversion between ASCII and EBCDIC. But only by programs which are aware of tags and honor them.
 
 
 Using Ansible Community Modules with z/OS
 -----------------------------------------
 
 The Ansible core engine processes all data as either binary or text encoded in UTF-8.
-The Ansible community modules assume all data (files and pipes/streams) is utf-8 encoded (if not binary).
+The Ansible community modules assume all data (files and pipes/streams) is utf-8 encoded.
 
 On z/OS, since data (file or stream) is sometimes text encoded in EBCDIC, special care must be taken.
 
@@ -57,7 +58,7 @@ Here are some notes / pro-tips when using the community modules with z/OS. This 
 
     The default Z shell (/bin/sh) will return output in EBCDIC, but the LE variables will convert that stream and make output look sensible on the Ansible side.
     However, some command line programs may return output in UTF-8 and not tag the pipe, in this case, the autoconversion may assume output is in EBCDIC and attempt to convert it.
-    The command module allows for piped commands, try piping the output through a call to iconv.
+    The ansible.builtin.command module allows for piped commands, try piping the output through a call to iconv.
 
     .. code-block:: yaml
 
@@ -66,7 +67,7 @@ Here are some notes / pro-tips when using the community modules with z/OS. This 
 
 * ansible.builtin.raw
 
-    The raw module, by design, ignores all remote environment settings.
+    The raw module, by design, ignores all remote environment settings. Running against UNIX Systems Services as a managed nodes requires some base configurations.
     One trick to pass in the bare minimal environment variables is to chain export statements before the desired command. 
 
     .. code-block:: yaml
@@ -88,13 +89,13 @@ Here are some notes / pro-tips when using the community modules with z/OS. This 
 * ansible.builtin.blockinfile / ansible.builtin.lineinfile
     These modules process all data in UTF-8, so be sure to convert files before and re-tag the resulting files after.
 
-* ansible.builtin.replace - ketan doesn't know (yet)
+* ansible.builtin.replace - ketan doesn't know (yet) - TODO verify/remove
 
-* ansible.builtin.script - won't work - file tagging issue.
+* ansible.builtin.script - won't work - file tagging issue. - TODO verify/remove
 
 
 
-Configuring the Remote Environment
+Configure the Remote Environment
 -----------------------------------
 
 Certain Language Environment (LE) configurations enable automatic encoding conversion and automatic file tagging functionality required by python on z/OS systems.
@@ -118,7 +119,7 @@ Note, the remote environment can be set any of these levels:
 
 See <here> for more details on setting environment variables. TODO - link to ansible docs on environment config.
 
-Configuring the Remote Python Interpreter
+Configure the Remote Python Interpreter
 -----------------------------------------
 
 Ansible requires a python interpreter to run most modules on the remote host, and it checks for python at the ‘default’ path ``/usr/bin/python``.
@@ -135,9 +136,9 @@ For example:
 
 When the path to the python interpreter is not found in the default location on the target host, an error containing the following message may result: ``/usr/bin/python: FSUM7351 not found``
 
-For more details, see: :ref:`python_interpreters`. TODO - link should be to FAQ page (not loca)
+For more details, see: :ref:`python_interpreters`. TODO - link should be to FAQ page (not local)
 
-Enabling Ansible Pipelining
+Enable Ansible Pipelining
 ---------------------------
 Enable pipelining in the ansible.cfg file. TODO - <link to pipelining config>
 
