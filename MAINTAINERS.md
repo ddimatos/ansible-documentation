@@ -6,6 +6,11 @@ If you're interested in becoming a maintainer, or want to get in touch with us, 
 We have weekly meetings on Matrix every Tuesday.
 See [the Ansible calendar](https://forum.ansible.com/upcoming-events) for meeting details.
 
+## Requesting review from legal
+
+Any modifications to the `DCO` or `COPYING` file must be reviewed and approved by the Red Hat open-source legal team.
+Send an email with the request to `opensource-legal@redhat.com` with `ansible-community-team@redhat.com` on copy.
+
 ## Branching for new stable versions
 
 The branching strategy for this repository mirrors the [`ansible/ansible`](https://github.com/ansible/ansible) repository.
@@ -49,7 +54,7 @@ After creating a new stable branch, remove the appropriate files and references.
 
 ```bash
 # Remove the following workflow files, the tagger script, and tagger requirements.
-git rm -r .github/workflows/pip-compile-dev.yml .github/workflows/pip-compile-docs.yml .github/workflows/reusable-pip-compile.yml .github/workflows/tag.yml hacking/tagger tests/tag.*
+git rm -r .github/workflows/pip-compile-dev.yml .github/workflows/pip-compile-docs.yml .github/workflows/reusable-pip-compile.yml .github/workflows/tag.yml .github/workflows/build-package-docs.yaml hacking/tagger tests/tag.*
 ```
 
 Next, remove references to the tagger dependencies as follows:
@@ -67,6 +72,10 @@ Next, remove references to the tagger dependencies as follows:
    ```
 
 3. Open `noxfile.py` and remove `"hacking/tagger/tag.py",` from the `LINT_FILES` tuple.
+
+### Updating the pip compile dev workflow
+
+Update the `.github/workflows/pip-compile-dev.yml` workflow so that it includes the new stable branch and drops the oldest branch.
 
 ### Update Python versions in the support matrix
 

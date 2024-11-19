@@ -220,7 +220,6 @@ html_theme_options = {
     'hubspot_id': '330046',
     'satellite_tracking': True,
     'show_extranav': True,
-    'swift_id': 'yABGvz2N8PwcwBxyfzUc',
     'tag_manager_id': 'GTM-PSB293',
     'vcs_pageview_mode': 'edit'
 }
@@ -240,16 +239,16 @@ html_context = {
     'current_version': version,
     'latest_version': (
         'devel' if tags.has('all') else
-        '2.17' if tags.has('core_lang') or tags.has('core') else
-        '10' if tags.has('ansible')
+        '2.18' if tags.has('core_lang') or tags.has('core') else
+        '11' if tags.has('ansible')
         else '<UNKNOWN>'
     ),
     # list specifically out of order to make latest work
     'available_versions': (
         ('devel',) if tags.has('all') else
         ('2.15_ja', '2.14_ja', '2.13_ja',) if tags.has('core_lang') else
-        ('2.17', '2.16', '2.15', 'devel',) if tags.has('core') else
-        ('latest', '9', '2.9', 'devel') if tags.has('ansible')
+        ('2.18', '2.17', '2.16', 'devel',) if tags.has('core') else
+        ('latest', '2.9', 'devel') if tags.has('ansible')
         else '<UNKNOWN>'
     ),
 }
