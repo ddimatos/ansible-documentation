@@ -95,9 +95,32 @@ Here are some notes / pro-tips when using the community modules with z/OS. This 
 * ansible.builtin.blockinfile / ansible.builtin.lineinfile
     These modules process all data in UTF-8, so be sure to convert files before and re-tag the resulting files after.
 
-* ansible.builtin.script - won't work - file tagging issue. - TODO verify/remove
+* ansible.builtin.script
+    The built in script module copies a local file over to a remote target and attempts to run it.
+    The issue that UNIX Systems Services targets run into is that the file does not get tagged as UTF-8 text.
+    When the underlying shell attempts to read the untagged script file, it will assume the default,
+    that the file is encoded in EBCDIC, and the file will not be read correctly and the script will not run.
+    One work-around is to manually copy local files over (``ansible.builtin.copy`` ) and convert or tag files (with the ``ansible.builtin.command`` module).
+    With this work-around, some of the niceties of the script module are lost, such as automatically cleaning up the script file once it's run,
+    but it is trivial to recreate those steps as separate playbook tasks.
 
+    .. code-block:: yaml
 
+        - name: Copy local script file to remote
+            ansible.builtin.copy:
+                src: "{{ playbook_dir }}/local/scripts/sample.sh"
+                dest: /u/ibmuser/scripts/
+
+        - name: Tag remote script file
+            ansible.builtin.command: "chtag -tc ISO8859-1 /u/ibmuser/scripts/sample.sh"
+
+        - name: Run script
+            ansible.builtin.command: "/u/ibmuser/scripts/sample.sh"
+
+    Another convoluted work-around is to store local script files in EBCDIC.
+    They may be unreadable on the controller, but they will copy over to UNIX Systems Services targets,
+    be read in correctly as EBCDIC, and the script will run. This approach takes advantage of the built-in conveniences of the script module,
+    but storing unreadable files locally makes maintaining those script files difficult.
 
 Configure the Remote Environment
 -----------------------------------
