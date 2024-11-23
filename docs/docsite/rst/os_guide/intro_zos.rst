@@ -32,7 +32,8 @@ Default behavior for an un-tagged file or stream is determined by the program, f
 
 Ansible modules will not read or honor any file tags. It is up to the user to determine the nature of remote data. This is achieveable with an additional task using the ``builtin.command`` module and apply any necessary encoding conversion.
 
-.. code-block::
+.. code-block:: yaml
+
     - name: tag my_file.txt as ibm-1047 ebcdic.
       ansible.builtin.command: chtag -tc ibm1047 my_file.txt
 
@@ -54,7 +55,6 @@ On z/OS, since text data (file or stream) is sometimes encoded in EBCDIC and som
 Here are some notes / pro-tips when using the community modules with z/OS. This is by no means a comprehensive list.
 
 * ansible.builtin.command / ansible.builtin.shell
-
     The command and shell modules are excellent for automating tasks for which command line solutions already exist. 
     The thing to keep in mind when using these modules is depending on the system configuration, the Z shell (/bin/sh) may return output in EBCDIC.
     The LE environment variable configurations will correctly convert streams if they are tagged and make output look sensible on the Ansible side.
@@ -69,7 +69,6 @@ Here are some notes / pro-tips when using the community modules with z/OS. This 
 
 
 * ansible.builtin.raw
-
     The raw module, by design, ignores all remote environment settings. Running against UNIX Systems Services as a managed nodes requires some base configurations.
     One trick to use this module with UNIX Systems Services is to pass in the bare minimal environment variables as a chain of export statements before the desired command.
 
@@ -144,10 +143,10 @@ Note, the remote environment can be set any of these levels:
 * playbook - ``environment`` variable at top of playbook.
 * block or task - ``environment`` key word.
 
-See <here> for more details on setting environment variables. TODO - link to ansible docs on environment config.
+For more details, see :ref:`playbooks_environment`.
 
 Configure the Remote Python Interpreter
------------------------------------------
+----------------------------------------
 
 Ansible requires a python interpreter to run most modules on the remote host, and it checks for python at the ‘default’ path ``/usr/bin/python``.
 
@@ -163,11 +162,11 @@ For example:
 
 When the path to the python interpreter is not found in the default location on the target host, an error containing the following message may result: ``/usr/bin/python: FSUM7351 not found``
 
-For more details, see: :ref:`python_interpreters`. TODO - link should be to FAQ page (not local)
+For more details, see: :ref:`python_interpreters`.
 
 Enable Ansible Pipelining
 ---------------------------
-Enable pipelining in the ansible.cfg file. TODO - <link to pipelining config>
+Enable :ref:`ANSIBLE_PIPELINING` in the ansible.cfg file. TODO - <fix link to ansible_pipelining in config.rst>
 
 When Ansible pipelining is enabled (`see the config option here <https://docs.ansible.com/ansible/latest/reference_appendices/config.html#ansible-pipelining>`_),
 Ansible passes any module code to the remote target node through python's stdin pipe and runs it in all in a single call rather than copying data to temp files and reading from those files.
@@ -188,11 +187,12 @@ When Ansible pipelining is enabled but the ``PYTHONSTDINENCODING`` property is n
 Note, the ``'\x81'`` below may vary based on the target user and host:
 
 .. code-block::
+
     SyntaxError: Non-UTF-8 code starting with '\\x81' in file <stdin> on line 1, but no encoding declared; see https://peps.python.org/pep-0263/ for details
 
 
 idk-Dealing with unreadable chars
------------------------------
+---------------------------------
 
 You're probably running into an EBCDIC encoding mix up.
 Double check that your remote environment is set up properly.
