@@ -47,18 +47,21 @@ File and pipe tags can be used for automatic conversion between ASCII and EBCDIC
 Using Ansible Community Modules with z/OS
 -----------------------------------------
 
-The Ansible core engine processes all data as either binary or text encoded in UTF-8.
-The Ansible community modules assume all data (files and pipes/streams) is utf-8 encoded.
+The Ansible community modules assume all textual data (files and pipes/streams) is utf-8 encoded.
 
-On z/OS, since data (file or stream) is sometimes text encoded in EBCDIC, special care must be taken.
+On z/OS, since text data (file or stream) is sometimes encoded in EBCDIC and sometimes in UTF-8, special care must be taken to identify the encoding of target data.
 
 Here are some notes / pro-tips when using the community modules with z/OS. This is by no means a comprehensive list.
 
 * ansible.builtin.command / ansible.builtin.shell
 
-    The default Z shell (/bin/sh) will return output in EBCDIC, but the LE variables will convert that stream and make output look sensible on the Ansible side.
-    However, some command line programs may return output in UTF-8 and not tag the pipe, in this case, the autoconversion may assume output is in EBCDIC and attempt to convert it.
-    The ansible.builtin.command module allows for piped commands, try piping the output through a call to iconv.
+    The command and shell modules are excellent for automating tasks for which command line solutions already exist. 
+    The thing to keep in mind when using these modules is depending on the system configuration, the Z shell (/bin/sh) may return output in EBCDIC.
+    The LE environment variable configurations will correctly convert streams if they are tagged and make output look sensible on the Ansible side.
+    However, some command line programs may return output in UTF-8 and not tag the pipe.
+    In this case, the autoconversion may incorrectly assume output is in EBCDIC and attempt to convert it and wind up with yet more unreadable data.
+    If the source encoding can be determined, since the ``ansible.builtin.command`` module allows chaining together commands through pipes, try piping the output through a call to iconv.
+    You may need to play around with the 'to' and 'from' encodings to determine the correct set.
 
     .. code-block:: yaml
 
@@ -68,7 +71,7 @@ Here are some notes / pro-tips when using the community modules with z/OS. This 
 * ansible.builtin.raw
 
     The raw module, by design, ignores all remote environment settings. Running against UNIX Systems Services as a managed nodes requires some base configurations.
-    One trick to pass in the bare minimal environment variables is to chain export statements before the desired command. 
+    One trick to use this module with UNIX Systems Services is to pass in the bare minimal environment variables as a chain of export statements before the desired command.
 
     .. code-block:: yaml
 
@@ -80,16 +83,17 @@ Here are some notes / pro-tips when using the community modules with z/OS. This 
             export _TAG_REDIR_OUT: "txt" ;
             echo "hello world!"
 
-    Alternatively, consider using the ansible.builtin.command or ansible.builtin.shell modules mentioned above.
+    Alternatively, consider using the ``ansible.builtin.command`` or ``ansible.builtin.shell`` modules mentioned above,
+    which set up the configured environment for each task.
+
 
 * ansible.builtin.copy / ansible.builtin.fetch
     The built in community modules will NOT automatically tag files, nor will existing file tags be honored nor preserved.
-    You can treat files as binaries when running copy/fetch operations, there is no issue in terms of data integrity, just remember to restore the correct tag and encoding once the file is returned to z/OS, as that data will not be stored for you.
+    You can treat files as binaries when running copy/fetch operations, there is no issue in terms of data integrity,
+    just remember to restore the correct tag and encoding once the file is returned to z/OS, as that data will not be stored for you.
 
 * ansible.builtin.blockinfile / ansible.builtin.lineinfile
     These modules process all data in UTF-8, so be sure to convert files before and re-tag the resulting files after.
-
-* ansible.builtin.replace - ketan doesn't know (yet) - TODO verify/remove
 
 * ansible.builtin.script - won't work - file tagging issue. - TODO verify/remove
 
