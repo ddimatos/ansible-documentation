@@ -191,8 +191,8 @@ Note, the ``'\x81'`` below may vary based on the target user and host:
     SyntaxError: Non-UTF-8 code starting with '\\x81' in file <stdin> on line 1, but no encoding declared; see https://peps.python.org/pep-0263/ for details
 
 
-Unreadable chars
-----------------
+Unreadable Characters
+---------------------
 
 Seeing unreadable characters in playbook output is most typically and an EBCDIC encoding mix up.
 Double check that the remote environment is set up properly.
