@@ -5,8 +5,7 @@ Managing z/OS hosts with Ansible
 
 
 Ansible can connect to UNIX Systems Services to bring your Ansible Automation strategy to IBM Z.
-
-"This enables development and operations automation on Z through a seamless, unified workflow orchestration with configuration management, provisioning, and application deployment in one easy-to-use platform."
+This enables development and operations automation on IBM Z through a seamless, unified workflow orchestration with configuration management, provisioning, and application deployment with the easy-to-use Ansible platform.
 
 
 Ansible and UNIX Systems Services
