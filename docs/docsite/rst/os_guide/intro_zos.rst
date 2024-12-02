@@ -20,12 +20,12 @@ To learn more about z/OS managed nodes, see `Red Hat Certified Content for IBM Z
 
 The z/OS Landscape
 -------------------
-While most systems process files in two modes - binary or utf8 encoded text, IBM Z and UNIX Systems Services features an additional third flavor - ebcdic-encoded text.
+While most systems process files in two modes - binary or UTF-8 encoded text, IBM Z and UNIX Systems Services features an additional third flavor - EBCDIC-encoded text.
 Ansible has provisions to handle binary data and UTF-8 encoded textual data, but not data encoded in EBCDIC.
 This is not necessarily a limitation, it simply requires additional steps in defining additional tasks convert files to/from their original encodings.
 It is up to the Ansible user managing z/OS nodes to understand the nature of the files in their automation.
 
-The type (binary or text) and encoding of files can be stored in "tags". File tags is a z/OS UNIX Systems Services concept (part of enhanced ASCII) which was established to distinguish binary files from utf-8 encoded text files and ebcdic-encoded text files.
+The type (binary or text) and encoding of files can be stored in "tags". File tags is a z/OS UNIX Systems Services concept (part of enhanced ASCII) which was established to distinguish binary files from UTF-8 encoded text files and ebcdic-encoded text files.
 
 Default behavior for an un-tagged file or stream is determined by the program, for example, 
 `IBM Open Enterprise SDK for Python <https://www.ibm.com/products/open-enterprise-python-zos>`__ defaults to the UTF-8 encoding.
@@ -34,7 +34,7 @@ Ansible modules will not read or honor any file tags. It is up to the user to de
 
 .. code-block:: yaml
 
-    - name: tag my_file.txt as ibm-1047 ebcdic.
+    - name: tag my_file.txt as ibm-1047 EBCDIC.
       ansible.builtin.command: chtag -tc ibm1047 my_file.txt
 
 
@@ -48,7 +48,7 @@ File and pipe tags can be used for automatic conversion between ASCII and EBCDIC
 Using Ansible Community Modules with z/OS
 -----------------------------------------
 
-The Ansible community modules assume all textual data (files and pipes/streams) is utf-8 encoded.
+The Ansible community modules assume all textual data (files and pipes/streams) is UTF-8 encoded.
 
 On z/OS, since text data (file or stream) is sometimes encoded in EBCDIC and sometimes in UTF-8, special care must be taken to identify the encoding of target data.
 
@@ -191,12 +191,13 @@ Note, the ``'\x81'`` below may vary based on the target user and host:
     SyntaxError: Non-UTF-8 code starting with '\\x81' in file <stdin> on line 1, but no encoding declared; see https://peps.python.org/pep-0263/ for details
 
 
-idk-Dealing with unreadable chars
----------------------------------
+Unreadable chars
+----------------
 
-You're probably running into an EBCDIC encoding mix up.
-Double check that your remote environment is set up properly.
+Seeing unreadable characters in playbook output is most typically and an EBCDIC encoding mix up.
+Double check that the remote environment is set up properly.
 Also check the expected file encodings, both on the remote node and the controller.
-ansible-core modules will assume all text data is utf8 encoded, while z/OS may be using EBCDIC.
+ansible-core modules will assume all text data is UTF-8 encoded, while z/OS may be using EBCDIC.
 On many z/OS systems, the default encoding for untagged files is EBCDIC.
-This variation in default settings can easily lead to interpreting data using the the wrong encoding.
+This variation in default settings can easily lead to mis-interpreting data using the the wrong encoding,
+whether that's failing to auto convert EBCDIC to UTF-8 or erroneously attempting to auto convert data that is already in UTF-8.
