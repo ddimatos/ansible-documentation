@@ -1,4 +1,5 @@
-:orphan:
+.. _working_with_zos:
+
 
 Managing z/OS hosts with Ansible
 ================================

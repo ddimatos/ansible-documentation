@@ -385,6 +385,7 @@ Running on z/OS
 
     zos1 ansible_shell_executable=/usr/lpp/bash/bin/bash
 
+.. seealso:: :ref:`working_with_zos`
 
 Running under fakeroot
 ----------------------
