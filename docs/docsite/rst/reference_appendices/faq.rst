@@ -374,34 +374,6 @@ Running on z/OS
 
   Note, the remote environment can be set any of these levels: inventory (inventory.yml, group_vars, or host_vars), play, block, or task with the ``environment`` key word.
 
-
-Running on z/OS
----------------
-
-There are a few common errors that one might run into when trying to execute Ansible on z/OS as a target.
-
-* Version 2.7.6 of python for z/OS will not work with Ansible because it represents strings internally as EBCDIC.
-
-  To get around this limitation, download and install a later version of `python for z/OS <https://www.rocketsoftware.com/zos-open-source>`_ (2.7.13 or 3.6.1) that represents strings internally as ASCII. Version 2.7.13 is verified to work.
-
-* When ``pipelining = False`` in `/etc/ansible/ansible.cfg` then Ansible modules are transferred in binary mode through sftp however execution of python fails with
-
-  .. error::
-      SyntaxError: Non-UTF-8 code starting with \'\\x83\' in file /a/user1/.ansible/tmp/ansible-tmp-1548232945.35-274513842609025/AnsiballZ_stat.py on line 1, but no encoding declared; see https://python.org/dev/peps/pep-0263/ for details
-
-  To fix it set ``pipelining = True`` in `/etc/ansible/ansible.cfg`.
-
-* Python interpret cannot be found in default location ``/usr/bin/python`` on target host.
-
-  .. error::
-      /usr/bin/python: EDC5129I No such file or directory
-
-  To fix this set the path to the python installation in your inventory like so:
-
-  .. code-block:: ini
-
-    zos1 ansible_python_interpreter=/usr/lpp/python/python-2017-04-12-py27/python27/bin/python
-
 * Start of python fails with ``The module libpython2.7.so was not found.``
 
   .. error::
