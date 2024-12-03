@@ -164,8 +164,18 @@ When the path to the python interpreter is not found in the default location on 
 
 For more details, see: :ref:`python_interpreters`.
 
+Configure the Remote Shell
+--------------------------
+The z/OS UNIX Systems Services managed node includes several shells. Currently the only supported shell is the z/OS Shell located in path ``/bin/sh``.
+To configure which shell the Ansible control node uses on the target node, set inventory variable :ref:`ansible_shell_executable<ansible_shell_executable>`.
+For example:
+
+.. code-block:: ini
+
+    zos1 ansible_shell_executable=/bin/sh
+
 Enable Ansible Pipelining
----------------------------
+-------------------------
 Enable :ref:`ANSIBLE_PIPELINING` in the ansible.cfg file.
 
 When Ansible pipelining is enabled (`see the config option here <https://docs.ansible.com/ansible/latest/reference_appendices/config.html#ansible-pipelining>`_),
