@@ -318,10 +318,15 @@ is likely the problem. There are several workarounds:
 
   (bash, ksh, and zsh should also be POSIX compatible if you have any of those installed).
 
-Running on z/OS (NEW)
----------------------
+Running on z/OS
+---------------
 
-* Ansible requires a python interpreter to execute modules on the remote host, and checks for it at the ‘default’ path ``/usr/bin/python``.
+* When the path to the python interpreter is not found in the default location on the target host, the following error may result:
+
+  .. error::
+    /usr/bin/python: FSUM7351 not found
+
+  Ansible requires a python interpreter to execute modules on the remote host, and checks for it at the ‘default’ path ``/usr/bin/python``.
 
   | On z/OS, the Python 3 interpreter (from `IBM Open Enterprise SDK for Python <https://www.ibm.com/products/open-enterprise-python-zos>`_) is often installed to a different path, typically something like: 
   | ``<path-to-python>/usr/lpp/cyp/v3r12/pyz``.
@@ -333,29 +338,24 @@ Running on z/OS (NEW)
 
     zos1 ansible_python_interpreter:/python/3.12/usr/lpp/cyp/v3r12/pyz
 
-  When the path to the python interpreter is not found in the default location on the target host, the following error may result:
-
-  .. error::
-    /usr/bin/python: FSUM7351 not found
-
   For more details, see: :ref:`python_interpreters`.
 
-* IBM z/OS processes data (file or instream) primarily in one of three ways: binary, as text encoded in UTF-8, or as text encoded in EBCDIC. The type (binary or text) and encoding of the data can be stored in a tag (a feature of enhance ASCII). Default behavior for an un-tagged file or stream is determined by the program, for example, `IBM Open Enterprise SDK for Python <https://www.ibm.com/products/open-enterprise-python-zos>`__ defaults to the UTF-8 encoding.
+*  When :ref:`ANSIBLE_PIPELINING` is not enabled or when Ansible pipelining is enabled but the ``PYTHONSTDINENCODING`` property is not correctly set, the following error may result.
 
-  The ansible core engine is unaware of tags in z/OS UNIX and thus processes all data as either binary or text encoded in UTF-8. This means that data sent to remote z/OS nodes is encoded in UTF-8 and un-tagged. The z/OS UNIX remote shell defaults to an EBCDIC encoding for un-tagged data streams. This mismatch in data encodings can be resolved with the ``PYTHONSTDINENCODING`` environment variable, which tags the pipe with the encoding specified. File and pipe tags are used for automatic conversion between ASCII and EBCDIC.
+  .. error::
+    SyntaxError: Non-UTF-8 code starting with '\\x81' in file <stdin> on line 1, but no encoding declared; see https://peps.python.org/pep-0263/ for details
+  Note, the ``'\x81'`` below may vary based on the target user and host:
 
-  When Ansible pipelining is enabled (`see the config option here <https://docs.ansible.com/ansible/latest/reference_appendices/config.html#ansible-pipelining>`_), Ansible passes any module code to the remote target node through python's stdin pipe and runs it in all in a single call. For more details on pipelining, see: :ref:`flow_pipelining`.
+  When Ansible pipelining is enabled, Ansible passes all module code to the remote target through python's stdin pipe and runs it all in a single call.
+  For more details on pipelining, see: :ref:`flow_pipelining`.
 
-  Include the following in the environment for any tasks performed on z/OS target nodes. The value should be the local encoding used by the z/OS UNIX shell of the remote target.
+  Include the following in the remote environment configuration for any tasks performed on z/OS target nodes.
+  The value should be the local encoding used by the z/OS UNIX Systems Services shell of the remote target.
 
   .. code-block:: yaml
 
     PYTHONSTDINENCODING: "cp1047"
 
-  When Ansible pipelining is enabled but the ``PYTHONSTDINENCODING`` property is not correctly set, the following error may result. Note, the ``'\x81'`` below may vary based on the target user and host:
-
-  .. error::
-    SyntaxError: Non-UTF-8 code starting with '\\x81' in file <stdin> on line 1, but no encoding declared; see https://peps.python.org/pep-0263/ for details
 
 
 * Certain language environment (LE) configurations enable auto conversion and file tagging functionality required by python on z/OS systems. 
