@@ -178,8 +178,8 @@ Enable Ansible Pipelining
 -------------------------
 Enable :ref:`ANSIBLE_PIPELINING` in the ansible.cfg file.
 
-When Ansible pipelining is enabled (`see the config option here <https://docs.ansible.com/ansible/latest/reference_appendices/config.html#ansible-pipelining>`_),
-Ansible passes any module code to the remote target node through python's stdin pipe and runs it in all in a single call rather than copying data to temp files and reading from those files.
+When Ansible pipelining is enabled, Ansible passes any module code to the remote target node
+through python's stdin pipe and runs it in all in a single call rather than copying data to temp files and reading from those files.
 For more details on pipelining, see: :ref:`flow_pipelining`.
 
 Enabling this behavior is encouraged because python will tag its pipes with the proper encoding, so there is less chance of encountering encoding errors. 
