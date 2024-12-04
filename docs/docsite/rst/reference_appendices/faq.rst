@@ -344,6 +344,7 @@ Running on z/OS
 
   .. error::
     SyntaxError: Non-UTF-8 code starting with '\\x81' in file <stdin> on line 1, but no encoding declared; see https://peps.python.org/pep-0263/ for details
+
   Note, the ``'\x81'`` below may vary based on the target user and host:
 
   When Ansible pipelining is enabled, Ansible passes all module code to the remote target through python's stdin pipe and runs it all in a single call.
