@@ -374,17 +374,6 @@ Running on z/OS
 
   Note, the remote environment can be set any of these levels: inventory (inventory.yml, group_vars, or host_vars), play, block, or task with the ``environment`` key word.
 
-* Start of python fails with ``The module libpython2.7.so was not found.``
-
-  .. error::
-    EE3501S The module libpython2.7.so was not found.
-
-  On z/OS, you must execute python from gnu bash. If gnu bash is installed at ``/usr/lpp/bash``, you can fix this in your inventory by specifying an ``ansible_shell_executable``:
-
-  .. code-block:: ini
-
-    zos1 ansible_shell_executable=/usr/lpp/bash/bin/bash
-
 .. seealso:: :ref:`working_with_zos`
 
 Running under fakeroot
