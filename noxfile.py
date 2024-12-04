@@ -4,6 +4,7 @@ import os
 import shlex
 import shutil
 from argparse import ArgumentParser, BooleanOptionalAction
+from contextlib import suppress
 from glob import iglob
 from pathlib import Path
 from typing import cast
@@ -157,28 +158,42 @@ requirements_files = list(
 @nox.session(name="pip-compile", python=["3.11"])
 @nox.parametrize(["req"], requirements_files, requirements_files)
 def pip_compile(session: nox.Session, req: str):
-    # .pip-tools.toml was introduced in v7
-    # pip 24.3 causes a regression in pip-compile.
-    # See https://github.com/jazzband/pip-tools/issues/2131.
-    session.install("pip-tools >= 7", "pip < 24.3")
+    """
+    Update dependency lockfiles in tests/ directory with uv pip compile.
+    In addition to the usual flags supported by uv pip compile,
+    this nox session implements two custom custom flags:
 
-    # Use --upgrade by default unless a user passes -P.
+        --no-upgrade
+            By default, the noxfile passes --upgrade to uv pip compile which
+            updates all package versions in the lockfiles.
+            Pass --no-upgrade to keep existing package versions as they are and
+            only make the most minimal changes to sync the lockfiles with the input
+            (.in) files.
+        --check
+            Run uv pip compile without --upgrade and fail if any changes were made.
+            This ensures the lockfiles are in sync with the input files.
+    """
+    install(session, req="pip-compile")
+
     args = list(session.posargs)
-
-    # Support a custom --check flag to fail if pip-compile made any changes
-    # so we can check that that lockfiles are in sync with the input (.in) files.
     check_mode = "--check" in args
     if check_mode:
-        # Remove from args, as pip-compile doesn't actually support --check.
+        # Remove from args, as pip compile doesn't actually support --check.
         args.remove("--check")
     elif not any(
         arg.startswith(("-P", "--upgrade-package", "--no-upgrade")) for arg in args
     ):
+        # Use --upgrade by default unless the user passes a conflicting flag.
         args.append("--upgrade")
+    # Like --check, also remove --no-upgrade from args if it's present.
+    with suppress(ValueError):
+        args.remove("--no-upgrade")
 
     # fmt: off
     session.run(
-        "pip-compile",
+        "uv", "pip", "compile",
+        "--universal",
+        "--quiet",
         "--output-file", f"tests/{req}.txt",
         *args,
         f"tests/{req}.in",
