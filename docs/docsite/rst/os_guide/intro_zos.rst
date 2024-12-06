@@ -161,14 +161,14 @@ Configure the Remote Python Interpreter
 Ansible requires a python interpreter to run most modules on the remote host, and it checks for python at the ‘default’ path ``/usr/bin/python``.
 
 On z/OS, the python3 interpreter (from `IBM Open Enterprise SDK for Python <https://www.ibm.com/products/open-enterprise-python-zos>`_)
-is often installed to a different path, typically something like: ``<path-to-python>/usr/lpp/cyp/v3r12/pyz``.
+is often installed to a different path, typically something like: ``/usr/lpp/cyp/v3r12/pyz``.
 
 This path to the python interpreter can be configured with the Ansible inventory variable ``ansible_python_interpreter``.
 For example:
 
 .. code-block:: ini
 
-    zos1 ansible_python_interpreter:/python/3.12/usr/lpp/cyp/v3r12/pyz
+    zos1 ansible_python_interpreter:/usr/lpp/cyp/v3r12/pyz
 
 When the path to the python interpreter is not found in the default location on the target host,
 an error containing the following message may result: ``/usr/bin/python: FSUM7351 not found``
