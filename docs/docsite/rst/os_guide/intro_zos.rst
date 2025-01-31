@@ -238,6 +238,10 @@ Despite being POSIX-compliant, the UNIX Systems Services interface also cannot b
 There are some options available on the IBM Z platform:
 
 * IBM z/OS Container Extensions (zCX)
-* Open Shift Containers
+* Red Hat OpenShift on IBM zSystems and LinuxONE
 * Linux on IBM Z
 
+.. potential links:
+.. https://www.ibm.com/support/z-content-solutions/container-extensions/ | https://www.ibm.com/products/zcx-openshift
+.. https://www.ibm.com/docs/en/rhocp-ibm-z
+.. https://www.ibm.com/z/linux
