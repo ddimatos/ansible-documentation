@@ -321,6 +321,8 @@ is likely the problem. There are several workarounds:
 Running on z/OS
 ---------------
 
+* Generally speaking, z/OS cannot be used as an Ansible control node. For more details, see :ref:`zos_as_control_node`.
+
 * When the path to the python interpreter is not found in the default location on the target host, the following error may result:
 
   .. error::

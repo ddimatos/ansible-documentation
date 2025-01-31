@@ -223,3 +223,21 @@ ansible-core modules will assume all text data is UTF-8 encoded, while z/OS may 
 On many z/OS systems, the default encoding for untagged files is EBCDIC.
 This variation in default settings can easily lead to mis-interpreting data using the the wrong encoding,
 whether that's failing to auto convert EBCDIC to UTF-8 or erroneously attempting to auto convert data that is already in UTF-8.
+
+.. _zos_as_control_node:
+
+Using z/OS as a Control Node
+----------------------------
+
+.. Dan blog- https://community.ibm.com/community/user/ibmz-and-linuxone/blogs/daniel-jast1/2023/12/07/red-hat-aap-on-ibm-z-and-linuxone?communityKey=ce54fe94-0145-4832-a0ef-4ea81d6062cc
+.. RH blog- https://www.redhat.com/en/blog/red-hat-ansible-automation-platform-now-available-on-ibm
+
+The z/OS operating system currently cannot be configured to run as an Ansible control node.
+Despite being POSIX-compliant, the UNIX Systems Services interface also cannot be configured to run as an Ansible control node.
+
+There are some options available on the IBM Z platform:
+
+* IBM z/OS Container Extensions (zCX)
+* Open Shift Containers
+* Linux on IBM Z
+
