@@ -5,18 +5,18 @@ Managing z/OS hosts with Ansible
 ================================
 
 
-Ansible can connect to UNIX Systems Services to bring your Ansible Automation strategy to IBM Z.
+Ansible can connect to UNIX System Services to bring your Ansible Automation strategy to IBM Z.
 This enables development and operations automation on IBM Z through a seamless,
 unified workflow orchestration with configuration management, provisioning, and application deployment with
 the easy-to-use Ansible platform.
 
 
-Ansible and UNIX Systems Services
+Ansible and UNIX System Services
 ---------------------------------
-UNIX Systems Services can support the required dependencies for an Ansible managed node including running python and
+UNIX System Services can support the required dependencies for an Ansible managed node including running python and
 spawning interactive shell processes through SSH connections.
-Ansible can target UNIX Systems Services nodes to modify files, directories, etc. through built-in Ansible community modules.
-Further, anything that one can do by typing command(s) into the UNIX Systems Services shell can be captured
+Ansible can target UNIX System Services nodes to modify files, directories, etc. through built-in Ansible community modules.
+Further, anything that one can do by typing command(s) into the UNIX System Services shell can be captured
 and automated in an Ansible playbook.
 
 To learn more about z/OS managed nodes, 
@@ -26,13 +26,13 @@ see `Red Hat Certified Content for IBM Z <https://ibm.github.io/z_ansible_collec
 The z/OS Landscape
 -------------------
 While most systems process files in two modes - binary or UTF-8 encoded text, 
-IBM Z including UNIX Systems Services features an additional third flavor - text encoded in EBCDIC.
+IBM Z including UNIX System Services features an additional third flavor - text encoded in EBCDIC.
 Ansible has provisions to handle binary data and UTF-8 encoded textual data, but not EBCDIC encoded data.
 This is not necessarily a limitation, it simply requires additional tasks that convert files to/from their original encodings.
 It is up to the Ansible user managing z/OS nodes to understand the nature of the files in their automation.
 
 The type (binary or text) and encoding of files can be stored in file "tags".
-File tags is a z/OS UNIX Systems Services concept (part of enhanced ASCII) which was established to distinguish binary
+File tags is a z/OS UNIX System Services concept (part of enhanced ASCII) which was established to distinguish binary
 files from UTF-8 encoded text files and EBCDIC-encoded text files.
 
 Default behavior for an un-tagged file or stream is determined by the program, for example, 
@@ -79,8 +79,8 @@ Here are some notes / pro-tips when using the community modules with z/OS. This 
 
 
 * ansible.builtin.raw
-    The raw module, by design, ignores all remote environment settings. However, UNIX Systems Services managed nodes require some base configurations.
-    One trick to use this module with UNIX Systems Services is to pass in the bare minimal environment variables as a chain of export statements before the desired command.
+    The raw module, by design, ignores all remote environment settings. However, UNIX System Services managed nodes require some base configurations.
+    One trick to use this module with UNIX System Services is to pass in the bare minimal environment variables as a chain of export statements before the desired command.
 
     .. code-block:: yaml
 
@@ -106,7 +106,7 @@ Here are some notes / pro-tips when using the community modules with z/OS. This 
 
 * ansible.builtin.script
     The built in script module copies a local file over to a remote target and attempts to run it.
-    The issue that UNIX Systems Services targets run into is that the file does not get tagged as UTF-8 text.
+    The issue that UNIX System Services targets run into is that the file does not get tagged as UTF-8 text.
     When the underlying shell attempts to read the untagged script file, it will assume the default,
     that the file is encoded in EBCDIC, and the file will not be read correctly and the script will not run.
     One work-around is to manually copy local files over (``ansible.builtin.copy`` ) and convert or tag files (with the ``ansible.builtin.command`` module).
@@ -127,7 +127,7 @@ Here are some notes / pro-tips when using the community modules with z/OS. This 
             ansible.builtin.command: "/u/ibmuser/scripts/sample.sh"
 
     Another somewhat convoluted work-around is to store local script files in EBCDIC.
-    They may be unreadable on the controller, but they will copy over to UNIX Systems Services targets,
+    They may be unreadable on the controller, but they will copy over to UNIX System Services targets,
     be read in correctly in EBCDIC, and the script will run. This approach takes advantage of the built-in conveniences of the script module,
     but storing unreadable files locally makes maintaining those script files difficult.
 
@@ -177,7 +177,7 @@ For more details, see: :ref:`python_interpreters`.
 
 Configure the Remote Shell
 --------------------------
-The z/OS UNIX Systems Services managed node includes several shells.
+The z/OS UNIX System Services managed node includes several shells.
 Currently the only supported shell is the z/OS Shell located in path ``/bin/sh``.
 To configure which shell the Ansible control node uses on the target node, set inventory variable
 :ref:`ansible_shell_executable<ansible_shell_executable>`. For example:
@@ -233,7 +233,7 @@ Using z/OS as a Control Node
 .. RH blog- https://www.redhat.com/en/blog/red-hat-ansible-automation-platform-now-available-on-ibm
 
 The z/OS operating system currently cannot be configured to run as an Ansible control node.
-Despite being POSIX-compliant, the UNIX Systems Services interface also cannot be configured to run as an Ansible control node.
+Despite being POSIX-compliant, the UNIX System Services interface also cannot be configured to run as an Ansible control node.
 
 There are some options available on the IBM Z platform:
 
