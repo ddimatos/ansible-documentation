@@ -38,7 +38,8 @@ files from UTF-8 encoded text files and EBCDIC-encoded text files.
 Default behavior for an un-tagged file or stream is determined by the program, for example, 
 `IBM Open Enterprise SDK for Python <https://www.ibm.com/products/open-enterprise-python-zos>`__ defaults to the UTF-8 encoding.
 
-Ansible modules will not read or honor any file tags. It is up to the user to determine the nature of remote data.
+Ansible modules will not read or honor any file tags. It is up to the user to determine the nature of remote data and tag it appropriately.
+Data sent to remote z/OS nodes is by default encoded in UTF-8 and is not tagged.
 This is achieveable with an additional task using the ``builtin.command`` module and applying any necessary encoding conversion.
 
 .. code-block:: yaml
@@ -47,10 +48,9 @@ This is achieveable with an additional task using the ``builtin.command`` module
       ansible.builtin.command: chtag -tc ibm1047 my_file.txt
 
 
-Data sent to remote z/OS nodes is by default encoded in UTF-8 and is not tagged.
 The z/OS UNIX remote shell defaults to an EBCDIC encoding for un-tagged data streams. 
 This mismatch in data encodings can be resolved with the ``PYTHONSTDINENCODING`` environment variable,
-which tags the pipe with the encoding specified. 
+which tags the pipe used by python with the specified encoding.
 File and pipe tags can be used for automatic conversion between ASCII and EBCDIC.
 But only by programs on z/OS which are aware of tags and honor them.
 
@@ -149,9 +149,10 @@ Include the following configurations when setting the remote environment for any
 
 
 Note, the remote environment can be set any of these levels:
-* inventory - inventory.yml, group_vars/all.yml, or host_vars/all.yml
-* playbook - ``environment`` variable at top of playbook.
-* block or task - ``environment`` key word.
+
+    * inventory - inventory.yml, group_vars/all.yml, or host_vars/all.yml
+    * playbook - ``environment`` variable at top of playbook.
+    * block or task - ``environment`` key word.
 
 For more details, see :ref:`playbooks_environment`.
 
@@ -216,7 +217,7 @@ Note, the ``'\x81'`` below may vary based on the target user and host:
 Unreadable Characters
 ---------------------
 
-Seeing unreadable characters in playbook output is most typically and an EBCDIC encoding mix up.
+Seeing unreadable characters in playbook output is most typically an EBCDIC encoding mix up.
 Double check that the remote environment is set up properly.
 Also check the expected file encodings, both on the remote node and the controller.
 ansible-core modules will assume all text data is UTF-8 encoded, while z/OS may be using EBCDIC.
@@ -229,19 +230,11 @@ whether that's failing to auto convert EBCDIC to UTF-8 or erroneously attempting
 Using z/OS as a Control Node
 ----------------------------
 
-.. Dan blog- https://community.ibm.com/community/user/ibmz-and-linuxone/blogs/daniel-jast1/2023/12/07/red-hat-aap-on-ibm-z-and-linuxone?communityKey=ce54fe94-0145-4832-a0ef-4ea81d6062cc
-.. RH blog- https://www.redhat.com/en/blog/red-hat-ansible-automation-platform-now-available-on-ibm
-
 The z/OS operating system currently cannot be configured to run as an Ansible control node.
 Despite being POSIX-compliant, the UNIX System Services interface also cannot be configured to run as an Ansible control node.
 
-There are some options available on the IBM Z platform:
+There are some options available on the IBM Z platform to set up as a control node:
 
 * IBM z/OS Container Extensions (zCX)
 * Red Hat OpenShift on IBM zSystems and LinuxONE
 * Linux on IBM Z
-
-.. potential links:
-.. https://www.ibm.com/support/z-content-solutions/container-extensions/ | https://www.ibm.com/products/zcx-openshift
-.. https://www.ibm.com/docs/en/rhocp-ibm-z
-.. https://www.ibm.com/z/linux
